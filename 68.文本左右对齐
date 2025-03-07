@@ -1,0 +1,32 @@
+class Solution:
+    def fullJustify(self, words: List[str], maxWidth: int) -> List[str]:
+        ans=[]
+
+        while True:
+            n=len(words[0]) #至少文字长度为第0个单词
+            i=1
+            while i<len(words) and n+1+len(words[i])<=maxWidth:
+                n=n+1+len(words[i])
+                i+=1
+
+            if i==1:    #这行只有一个单词：
+                ans.append(words[0]+(maxWidth-n)*' ')
+            elif i<len(words):  #有多个单词，且不是最后一行：
+                line=words[:i]
+                num=len(line)-1     #有num个间隔，每个已有至少1个空格
+                left=maxWidth-n     #还需填入left个空格
+                per=left//num+1     #平均每个间隔填per个空格
+                extra=left%num      #前extra个间隔填per+1个
+
+                ans.append((' '*(per+1)).join(line[:extra+1])+' '*per+(' '*per).join(line[extra+1:]))
+            else:   #有多个单词，且是最后一行：
+                line=' '.join(words)
+                line+=(maxWidth-len(line))*' '
+                ans.append(line)
+
+            if i<len(words):
+                words=words[i:]
+            else:
+                break
+        
+        return ans
